@@ -195,7 +195,6 @@ if (user) {
           </div>
         </div>
       )}
-{}
       {showPopupforadd && (
         <div style={popupStyles.overlay}>
           <div style={popupStyles.popup}>
