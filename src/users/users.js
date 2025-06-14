@@ -11,15 +11,22 @@ function Users() {
     const createAccount = () => {
         setUsersPopup(true);
     };
+    const [formUser, setFormUser] = useState({
+    username: "",
+    password: "",
+    phone: "",
+    email: ""
+    });
     const createNow = () => {
-        const Username = document.getElementById("Username").value;
-        const Password = document.getElementById("Password").value;
-        const Phone = document.getElementById("Phone").value;
-        const Email = document.getElementById("Email").value;
-
-        if (!Username || !Password || !Phone || !Email) {
+        
+//         const Username = document.getElementById("Username").value;
+//         const Password = document.getElementById("Password").value;
+//         const Phone = document.getElementById("Phone").value;
+//         const Email = document.getElementById("Email").value;
+// debugger
+        if (!formUser.username || !formUser.password || !formUser.phone || !formUser.email) {
          toast.warn("Please fill in all fields.");
-           
+           debugger
         }
         else {
 
@@ -28,14 +35,14 @@ function Users() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ Username, Password, Phone, Email })
+                body: JSON.stringify(formUser)
             })
                 .then(res => res.json())
                 .then(data => {
 
                     toast.success("Registered successfully.");
                     setUsersPopup(false);
-                    setFormData({ username: Username, password: Password });
+                    setFormData(formUser);
                     login()
                window.location.href = ('http://localhost:3000/')
                 })
@@ -50,6 +57,10 @@ function Users() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
     
+      const handleChangec = (e) => {
+    const { id, value } = e.target;
+    setFormUser({ ...formUser, [id.toLowerCase()]: value });
+  };
     const login = () => {
         console.log(formData);
         fetch('http://localhost:3200/api/user/login', {
@@ -85,11 +96,11 @@ function Users() {
                 <form>
                     <div className="mb-3">
                         <label htmlFor="username" className="form-label">Username</label>
-                        <input type="text" className="form-control" onChange={handleChange} name="username" placeholder="Enter username" />
+                        <input type="text" className="form-control" value={formData.username} onChange={handleChange} name="username" placeholder="Enter username" />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="password" className="form-label">Password</label>
-                        <input type="password" className="form-control" onChange={handleChange}name="password" placeholder="Enter password" />
+                        <input type="password" className="form-control"value={formData.password}  onChange={handleChange}name="password" placeholder="Enter password" />
                     </div>
                     <div className="d-grid gap-2">
                         <button type="button" className="btn btn-primary" onClick={()=>login()}>Login</button>
@@ -107,26 +118,50 @@ function Users() {
                             </div>
                             <div className="modal-body">
                                 <form >
-                                    <div className="mb-3">
-                                        <label htmlFor="newUsername" className="form-label">Username</label>
-                                        <input type="text" className="form-control" id="Username" placeholder="Enter username" />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="newPassword" className="form-label">Password</label>
-                                        <input type="password" className="form-control" id="Password" placeholder="Enter password" />
-                                    </div>
-                                    {/* <div className="mb-3">
-                                        <label htmlFor="newPassword" className="form-label">Password Confirmation</label>
-                                        <input type="password" className="form-control" id="newPassword" placeholder="Enter password" />
-                                    </div> */}
-                                    <div className="mb-3">
-                                        <label htmlFor="newPhone" className="form-label">Phone</label>
-                                        <input type="text" className="form-control" id="Phone" placeholder="Enter your Phone" />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="newEmail" className="form-label">Email</label>
-                                        <input type="email" className="form-control" id="Email" placeholder="Enter your Email" />
-                                    </div>
+                                           <div className="mb-3">
+          <label htmlFor="username" className="form-label">Username</label>
+          <input
+            type="text"
+            className="form-control"
+            id="username"
+            value={formUser.username}
+            onChange={handleChangec}
+            placeholder="Enter username"
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">Password</label>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            value={formUser.password}
+            onChange={handleChangec}
+            placeholder="Enter password"
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="phone" className="form-label">Phone</label>
+          <input
+            type="text"
+            className="form-control"
+            id="phone"
+            value={formUser.phone}
+            onChange={handleChangec}
+            placeholder="Enter your Phone"
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">Email</label>
+          <input
+            type="email"
+            className="form-control"
+            id="email"
+            value={formUser.email}
+            onChange={handleChangec}
+            placeholder="Enter your Email"
+          />
+        </div>
                                     <button type="button" className="btn btn-primary center btn_self" onClick={()=>createNow()}>Create Account</button>
                                     <button type="button"  className="btn btn-primary btn_self"onClick={()=>setUsersPopup(false)}>Close</button>
                                 </form>
